@@ -54,3 +54,11 @@ class TestSettings:
         assert hyp["arg1"] == "val1"
         assert hyp["arg2"] == "val2"
 
+    def test_load_bonus(self):
+        self.setting.load_bonus()
+        bonus = self.setting.bonus_matrix
+        assert len(bonus.keys()) == 5
+        for key, value in bonus.items():
+            assert len(bonus[key]) == 4
+
+

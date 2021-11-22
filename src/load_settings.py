@@ -1,5 +1,6 @@
 import os
 import sys
+import pandas as pd
 
 """Alan Sun
 Settings and Hyperparameter Initialization, ISB Varsity Swim Rankings
@@ -75,4 +76,10 @@ class Settings:
         or if the event codes are given this will result in undefined behavior
         by the ranker.
         """
-        pass
+        df = pd.read_csv("bonus-matrix.settings", index_col=False, delimiter=' ')
+        for column in df.columns:
+            if column == "Rank":
+                continue
+            else:
+                self.bonus_matrix[column] = df[column].tolist()
+        return df
