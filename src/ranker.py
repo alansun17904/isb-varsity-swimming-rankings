@@ -31,7 +31,7 @@ class Ranker:
         if len(ranks) < h:
             ranks += [len(self.names)] * (int(h) - len(person))
         # we find person's top h events
-        score = self._sum_ranks(ranks)
+        score = self._sum_ranks(ranks[:int(h)])
 
         # add all events into dictionary for ease of assigning bonuses
         for row in range(len(person)):
