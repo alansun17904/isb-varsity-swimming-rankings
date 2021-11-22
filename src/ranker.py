@@ -70,7 +70,7 @@ class Ranker:
                 # if the rank is sufficient to qualify for a bonus
                 if rank - 1 < len(bonus_matrix[key]):
                     event_bonuses.append(bonus_matrix[key][rank - 1])
-        event_bonuses.sort()
+        event_bonuses.sort(reverse=True)
         bonus += sum(event_bonuses[:2])
         return bonus
 
