@@ -1,7 +1,3 @@
-import os
-import sys
-import pandas as pd
-
 """Alan Sun
 Settings and Hyperparameter Initialization, ISB Varsity Swim Rankings
 11/21/2021
@@ -19,6 +15,11 @@ to proceed:
     that is necessary for optimization. These specific arguments are described
     in full in the README.md
 """
+
+import os
+import sys
+import pandas as pd
+
 
 
 class Settings:
