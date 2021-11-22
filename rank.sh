@@ -15,4 +15,4 @@ echo
 echo The ranker will now start...
 echo At any point if you wish to stop press \(ctrl-C\)
 echo
-python src/main.py
+python3 src/main.py

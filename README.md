@@ -7,6 +7,17 @@ selection criteria, and then outputs this in pretty form in a specified file.
 For more information about the algorithm itself, please see the white paper that
 is attached in the repository.
 
+## Installation
+1. Please follow the instructions [here](https://www.python.org/downloads/) to download
+Python 3. 
+2. Download this directory.
+3. Open the Terminal app on Mac.
+4. Type in the command `cd`, drag the icon of the downloaded folder inside the terminal
+window. Press <Enter> when you see the path to the downloaded folder show up inside the 
+terminal.
+5. Type in the following command `./setup.sh` and press <Enter>. This download should take
+a while. 
+6. The program is ready for execution!
 ## Prerequisites
 We note that the notation of events is incredibly important. Each event is 
 assigned a unique code that is consistent throughout the input/output of the
@@ -30,7 +41,6 @@ the value of these codes and its events. A table of this is shown below:
 
 Please note that the casing of the codes is also significant.
 
-## Installation
 
 ## Usage
 Usage comes in three stages: data entry, hyperparameter determination, and ranking.
