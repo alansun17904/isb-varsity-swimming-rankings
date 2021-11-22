@@ -21,7 +21,6 @@ import sys
 import pandas as pd
 
 
-
 class Settings:
     def __init__(self):
         self.bonus_matrix = {}
@@ -49,8 +48,7 @@ class Settings:
             # assume that the first word must be the argument name, also assume
             # that argument values are separated by spaces.
             args = list(map(lambda x: x.strip(), line.split(" ")))
-            if args[0] == "attendence-bonus":
-                print(args[1])
+            if args[0] == "attendance-bonus":
                 if args[1].lower() == "false":
                     self.hyperparameters[args[0]] = (False, 0)
                 else:
@@ -83,4 +81,4 @@ class Settings:
                 continue
             else:
                 self.bonus_matrix[column] = df[column].tolist()
-        return df
+
