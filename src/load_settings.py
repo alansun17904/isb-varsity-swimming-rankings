@@ -46,8 +46,9 @@ class Settings:
         for line in fp.readlines():
             # assume that the first word must be the argument name, also assume
             # that argument values are separated by spaces.
-            args = line.split(" ")
+            args = list(map(lambda x: x.strip(), line.split(" ")))
             if args[0] == "attendence-bonus":
+                print(args[1])
                 if args[1].lower() == "false":
                     self.hyperparameters[args[0]] = (False, 0)
                 else:
@@ -56,6 +57,8 @@ class Settings:
                 self.hyperparameters[args[0]] = float(args[1])
             elif args[0] == "weighting-function":
                 self.hyperparameters[args[0]] = (args[1], float(args[2]))
+            else:
+                self.hyperparameters[args[0]] = args[1]
         if len(self.hyperparameters.keys()) < 3:
             raise RuntimeError("There were not enough arguments provided.");
         fp.close()

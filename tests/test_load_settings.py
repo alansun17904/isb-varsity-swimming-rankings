@@ -35,7 +35,22 @@ class TestSettings:
         assert hyp["weighting-function"][1] == 0.1
 
     def test_load_hyperparameter_complex(self):
-        pass
+        fp = open("hyperparameters.settings", "w")
+        fp.write("arg0 val0\n")
+        fp.write("weighting-function linear 0.1\n")
+        fp.write("h-index 20\n")
+        fp.write("attendence-bonus false\n")
+        fp.write("arg1 val1\n")
+        fp.write("arg2 val2\n")
+        fp.close()
+        self.setting.load_hyperparameters()
+        hyp = self.setting.hyperparameters
+        assert hyp["h-index"] == 20
+        assert hyp["weighting-function"][0] == "linear"
+        assert hyp["weighting-function"][1] == 0.1
+        assert hyp["attendence-bonus"][0] == False
+        assert hyp["attendence-bonus"][1] == 0
+        assert hyp["arg0"] == "val0"
+        assert hyp["arg1"] == "val1"
+        assert hyp["arg2"] == "val2"
 
-    def test_load_hyperparameter_weighting(self):
-        pass
