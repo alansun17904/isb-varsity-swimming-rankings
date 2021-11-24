@@ -20,3 +20,27 @@ used to achieve these scores.
 season.
 - Data showing historical APAC data and trends.
 - Goal settings / journaling.
+
+## Pages
+- Homepage
+  - Login, choose swimmer or coach
+- If swimmer direct them to the ranking page
+  - Have a portal where they can see their own times, upcoming meets etc.
+- If coach direct them to the hyperparameter/data page and also show
+them the ranking page.
+
+## Models
+- User model
+  - ID
+  - Name (first, last)
+  - Type
+  - Points
+  - Rank
+  - Times (foreign key)
+
+- Entries
+  - Event
+  - Time
+  - Meet
+
+
