@@ -1,0 +1,24 @@
+{% extends "ranker/base.html" %}
+{% block body_block %}
+  <h1>Rankings</h1>
+  <table>
+    <thead>
+      <th>Rank</th>
+      <th>Name</th>
+      <th>Sex</th>
+      <th>Event</th>
+      <th>Time</th>
+      <th>Meet</th>
+    </thead>
+  {% for entry in entries %}
+    <tr>
+      <td>{{ entry.rank }}</td>
+      <td>{{ entry.swimmer.username }}</td>
+      <td>{{ entry.sex }}</td>
+      <td>{{ entry.event }}</td>
+      <td>{{ entry.time }}</td>
+      <td>{{ entry.meet }}</td>
+    </tr>
+  {% endfor %}
+  </table>
+{% endblock %}
