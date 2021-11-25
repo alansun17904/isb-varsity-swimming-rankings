@@ -18,7 +18,6 @@ def convert_lts(time):
     # there exists minutes in the given string representation of time
     else:
         s = time.split(':')
-        print(int(s[0]) * 60 + float(s[1]))
         return int(s[0]) * 60 + float(s[1])
 
 ### Get all names from the sample excel 
@@ -34,19 +33,21 @@ for name in names:
         password = '1'
         u = User.objects.create(username=username, password=password)
         p = Profile.objects.create(user=u, sex=random.choice(['MALE', 'FEMALE']))
-        users[name] = u
         p.save()
         u.save()
-        users[clean(name)] = User.objects.get(username=clean(name))
+        users[clean(name)] = p
     except:
-        users[clean(name)] = User.objects.get(username=clean(name))
+        continue
 
 for entry in range(len(df)):
-    u = users[clean(df.iloc[entry]['Name'])]
-    event = df.iloc[entry]['Event']
-    meet = df.iloc[entry]['Meet']
-    time = convert_lts(str(df.iloc[entry]['Time']))
-    e = Entry.objects.create(swimmer=u, event=event, time=time, meet=meet)
-    e.save()
+    try:
+        u = users[clean(df.iloc[entry]['Name'])]
+        event = df.iloc[entry]['Event']
+        meet = df.iloc[entry]['Meet']
+        time = convert_lts(str(df.iloc[entry]['Time']))
+        e = Entry.objects.create(swimmer=u, event=event, time=time, meet=meet)
+        e.save()
+    except:
+        continue
 
 

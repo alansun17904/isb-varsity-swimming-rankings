@@ -16,7 +16,7 @@ class Profile(models.Model):
         return self.user.username
 
 class Entry(models.Model):
-    swimmer = models.ForeignKey(User, on_delete=models.CASCADE)
+    swimmer = models.ForeignKey(Profile, on_delete=models.CASCADE)
     rank = models.IntegerField(default=0)
     event = models.CharField(max_length=10)
     time = models.FloatField()
@@ -25,3 +25,14 @@ class Entry(models.Model):
     def __str__(self):
         return f'{str(self.swimmer)} - {self.event}'
 
+class Hyperparameters(models.Model):
+    """Singleton Django Model"""
+
+    h_index = models.IntegerField(default=6)
+    attendance_bonus = models.BooleanField(default=False)
+    weight_type = models.CharField(max_length=10, default="polynomial")
+    weight_a = models.FloatField(default=2)
+    bonus_matrix = models.JSONField()
+
+    def __str__(self):
+        return f'h={self.h_index}, wt={self.weight_type}, a={self.weight_a}'

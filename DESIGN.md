@@ -14,12 +14,14 @@ the dataset that is used to rank all swimmers.
 calculate the score in sorted order, as well as the specific times 
 used to achieve these scores.
 
+
 ## Additional Features
 - What-if analysis for swimmers.
 - PBlocks integration, optimization for post-selection/pre-championship
 season.
 - Data showing historical APAC data and trends.
 - Goal settings / journaling.
+
 
 ## Pages
 - Homepage
@@ -28,6 +30,7 @@ season.
   - Have a portal where they can see their own times, upcoming meets etc.
 - If coach direct them to the hyperparameter/data page and also show
 them the ranking page.
+
 
 ## Models
 - User model
@@ -42,5 +45,6 @@ them the ranking page.
   - Event
   - Time
   - Meet
+
 
 
