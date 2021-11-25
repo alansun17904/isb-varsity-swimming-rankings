@@ -1,15 +1,24 @@
 {% extends "ranker/base.html" %}
+{% load static %}
 {% block body_block %}
   <h1>Login</h1>
   {% if message %}
     {{ message }}
   {% endif %}
-  <form method="POST" action="{% url 'ranker:login' %}">
+  <div id="login" class="container">
+  <form class="login_page" method="POST" action="{% url 'ranker:login' %}">
     {% csrf_token %}
+    <p>
     <label for="username">Username:</label>
     <input type="text" name="username" placeholder="Enter given username">
+    </p>
+    <p>
     <label for="password">Password:</label>
-    <input type="password" name="password">
-    <input type="submit" value="login">
+    <input type="password" name="password" placeholder="Enter given password">
+    </p>
+    <p>
+    <input type="submit" value="Login">
+    </p>
   </form>
+  </div>
 {% endblock %}

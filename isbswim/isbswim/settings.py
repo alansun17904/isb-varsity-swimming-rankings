@@ -10,7 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
-from secrets import SECRET_KEY
+from isbswim.secrets import SECRET_KEY
 from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -124,7 +124,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_DIR = BASE_DIR / 'static'
-STATICFILES_DIR = [
+STATICFILES_DIRS = [
     STATIC_DIR,
 ]
 

@@ -1,5 +1,14 @@
 {% extends "ranker/base.html" %}
 {% block body_block %}
+  {% if user.is_authenticated %}
+  <h1>Welcome to ISB Varsity Swimming, {{ user.first_name }}!</h1>
+  <p>This is the home page.</p>
+  <p>Please either proceed to the rankings by clicking on the "rankings" link in the
+  navigation bar.</p>
+  {% else %}
   <h1>Welcome to ISB Varsity Swimming!</h1>
-  This is the home page.
+  <p>This is the home page.</p>
+  <p>Please either login to access this season's rankings and data or 
+  go to the about page to learn about how ranking is performed.</p>
+  {% endif %}
 {% endblock %}

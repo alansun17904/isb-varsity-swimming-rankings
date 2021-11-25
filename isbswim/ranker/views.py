@@ -4,13 +4,18 @@ from django.urls import reverse
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
-from ranker.models import Entry
+from ranker.models import Entry, Hyperparameters
 from django.contrib.auth.models import User
 from ranker.interpolation import calculate_entry_ranks, rank
 
 # Create your views here.
 def index(request):
     return render(request, 'ranker/index.html')
+
+def about(request):
+    hyp = Hyperparameters.objects.all()[0]
+    return render(request, 'ranker/about.html',
+            {'hyperparameters': hyp})
 
 def user_login(request):
     if request.method == 'POST':
