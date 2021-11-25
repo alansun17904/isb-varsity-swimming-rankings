@@ -1,14 +1,16 @@
 {% extends "ranker/base.html" %}
 {% block body_block %}
   <h1>Rankings</h1>
-  <table>
+  <table class="MALE">
     <thead>
-      <th>Rank</th>
       <th>Name</th>
-      <th>Event</th>
-      <th>Time</th>
-      <th>Meet</th>
+      <th>Score</th>
     </thead>
-  {% for entry in entries %}
+    {% for ranking in MALE %}
+    <tr>
+      <td>{{ ranking }}</td> 
+      <td>{{ ranking|floatformat:3 }}</td>
+    </tr>
+    {% endfor %}
   </table>
 {% endblock %}

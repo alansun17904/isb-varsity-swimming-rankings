@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from ranker.models import Entry
 from django.contrib.auth.models import User
-from ranker.interpolation import calculate_entry_ranks
+from ranker.interpolation import calculate_entry_ranks, rank
 
 # Create your views here.
 def index(request):
@@ -42,5 +42,8 @@ def rankings(request):
     ## We recalculate the ranks everytime that it is requested.
     entries = Entry.objects.all()
     calculate_entry_ranks()
-    return render(request, 'ranker/rankings.html', {'entries': entries})
+    frank = rank('FEMALE')
+    mrank = rank('MALE')
+    return render(request, 'ranker/rankings.html',
+            {'MALE': mrank, 'FEMALE': frank})
 

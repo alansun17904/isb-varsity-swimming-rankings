@@ -1,24 +1,16 @@
 {% extends "ranker/base.html" %}
 {% block body_block %}
   <h1>Rankings</h1>
-  <table>
+  <table class="MALE">
     <thead>
-      <th>Rank</th>
       <th>Name</th>
-      <th>Sex</th>
-      <th>Event</th>
-      <th>Time</th>
-      <th>Meet</th>
+      <th>Score</th>
     </thead>
-  {% for entry in entries %}
+    {% for ranking in FEMALE %}
     <tr>
-      <td>{{ entry.rank }}</td>
-      <td>{{ entry.swimmer.user.username }}</td>
-      <td>{{ entry.swimmer.sex }}</td>
-      <td>{{ entry.event }}</td>
-      <td>{{ entry.time }}</td>
-      <td>{{ entry.meet }}</td>
+      <td>{{ ranking.2 }}</td> 
+      <td>{{ ranking.0|floatformat:2 }}</td>
     </tr>
-  {% endfor %}
+    {% endfor %}
   </table>
 {% endblock %}

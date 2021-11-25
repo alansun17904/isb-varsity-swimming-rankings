@@ -30,6 +30,7 @@ class Hyperparameters(models.Model):
 
     h_index = models.IntegerField(default=6)
     attendance_bonus = models.BooleanField(default=False)
+    attendance_weight = models.FloatField(default=0.02)
     weight_type = models.CharField(max_length=10, default="polynomial")
     weight_a = models.FloatField(default=2)
     bonus_matrix = models.JSONField()
