@@ -28,6 +28,8 @@ def index(request):
                     swimmer=profile)
             entry.save()
             return HttpResponseRedirect(reverse('index'))
+        return HttpResponse("The data submitted was invalid. Please check your \
+                formatting and try again (especially for the time field)")
     return render(request, 'ranker/index.html', context)
 
 def about(request):
@@ -72,4 +74,3 @@ def event_ranks(request, sex, event):
             event=event).order_by('rank')
     context = {'entries': entries}
     return render(request, 'ranker/event_ranks.html', context)
-

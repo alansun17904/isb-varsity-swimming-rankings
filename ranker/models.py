@@ -1,3 +1,4 @@
+from django import forms
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -48,6 +49,13 @@ class Hyperparameters(models.Model):
     weight_type = models.CharField(max_length=10, default="polynomial")
     weight_a = models.FloatField(default=2)
     bonus_matrix = models.JSONField()
+
+    def clean(self):
+        if self.h_index < 1 or self.h_index > 12:
+            raise forms.ValidationError("h-index must be >= 1 and <= 12.")
+        elif self.attendance_weight < 0 or self.attendance_weight > 1:
+            raise forms.ValidationError("attendance bonus must be between \
+                        0 and 1.")
 
     def __str__(self):
         return f'h={self.h_index}, wt={self.weight_type}, a={self.weight_a}'
