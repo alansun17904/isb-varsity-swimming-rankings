@@ -32,10 +32,12 @@
       {% if entry.approved %}
       <tr class="approved">
         <td>
-          </a>
+            {{ entry.rank }}
         </td>
-        <td><a href="{% url 'ranker:event_ranks' sex=entry.swimmer.sex event=entry.event %}">
-                {{ entry.event }}</td>
+        <td>
+            <a href="{% url 'ranker:event_ranks' sex=entry.swimmer.sex event=entry.event %}">
+                {{ entry.event }}
+            </a>
         <td>{{ entry.time|shorttolong }}</td>
         <td>{{ entry.meet }}</td>
       </tr>
@@ -51,14 +53,14 @@
     {% endfor %}
   </table>
   <p>
-  Use the following form to add/update your times. Please note that 
+  Use the following form to add/update your times. Please note that
   any updates to the database needs to be approved by staff. Thus,
   changes may not be reflected right away.
   </p>
   <p>
   Please note that if your change has been approved it should turn green
   in the entry box. Otherwise, it will remain red. Moreover, if the entry
-  you have submitted has been deleted after some time, this means that 
+  you have submitted has been deleted after some time, this means that
   the change has been denied. Please see Coach Nic about inputting the
   correct information.
   </p>
@@ -70,7 +72,7 @@
   {% else %}
   <h1>Welcome to ISB Varsity Swimming!</h1>
   <p>This is the home page.</p>
-  <p>Please either login to access this season's rankings and data or 
+  <p>Please either login to access this season's rankings and data or
   go to the about page to learn about how ranking is performed.</p>
   {% endif %}
 {% endblock %}
