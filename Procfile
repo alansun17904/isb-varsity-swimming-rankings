@@ -1,1 +1,1 @@
-web: gunicorn isbswim/isbswim.wsgi
+web: gunicorn isbswim.wsgi
