@@ -4,13 +4,31 @@ from django.urls import reverse
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
-from ranker.models import Entry, Hyperparameters
+from ranker.models import Entry, Hyperparameters, Profile
 from django.contrib.auth.models import User
-from ranker.interpolation import calculate_entry_ranks, rank
+from ranker.interpolation import rank
+from ranker.forms import EntryForm
 
 # Create your views here.
 def index(request):
-    return render(request, 'ranker/index.html')
+    form = EntryForm()
+    profile = None
+
+    if request.user.is_authenticated:
+        profile = Profile.objects.all().get(user=request.user)
+    context = {'entries': Entry.objects.all(),
+            'profile': profile,
+            'updateForm': form}
+    if request.method == 'POST':
+        form = EntryForm(request.POST)
+        if form.is_valid():
+            entry = Entry(event=form.cleaned_data['event'],
+                    time=form.cleaned_data['time'],
+                    meet=form.cleaned_data['meet'],
+                    swimmer=profile)
+            entry.save()
+            return HttpResponseRedirect(reverse('index'))
+    return render(request, 'ranker/index.html', context)
 
 def about(request):
     hyp = Hyperparameters.objects.all()[0]
@@ -41,14 +59,17 @@ def user_logout(request):
     logout(request)
     return HttpResponseRedirect(reverse('index'))
 
-
 @login_required
 def rankings(request):
-    ## We recalculate the ranks everytime that it is requested.
-    entries = Entry.objects.all()
-    calculate_entry_ranks()
     frank = rank('FEMALE')
     mrank = rank('MALE')
     return render(request, 'ranker/rankings.html',
             {'MALE': mrank, 'FEMALE': frank})
+
+@login_required
+def event_ranks(request, sex, event):
+    entries = Entry.objects.filter(swimmer__sex=sex,
+            event=event).order_by('rank')
+    context = {'entries': entries}
+    return render(request, 'ranker/event_ranks.html', context)
 

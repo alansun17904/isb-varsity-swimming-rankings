@@ -1,7 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-
 class Profile(models.Model):
     """
     Extended profile that contains coach flag, which enables them to
@@ -15,15 +14,30 @@ class Profile(models.Model):
     def __str__(self):
         return self.user.username
 
+    def __eq__(self, other):
+        if type(other) != type(self):
+            return False
+        return self.user.username == other.user.username
+
 class Entry(models.Model):
     swimmer = models.ForeignKey(Profile, on_delete=models.CASCADE)
     rank = models.IntegerField(default=0)
     event = models.CharField(max_length=10)
     time = models.FloatField()
     meet = models.CharField(max_length=50)
+    approved = models.BooleanField(default=False)
+
+    @classmethod
+    def recalculate_entry_ranks(cls, sex, event):
+        event = Entry.objects.filter(event=event,
+                swimmer__sex=sex).order_by('time')
+        for rank, entry in enumerate(event):
+            entry.rank = rank + 1
+            entry.save()
 
     def __str__(self):
-        return f'{str(self.swimmer)} - {self.event}'
+        return f'{str(self.swimmer)}: {self.event}'
+
 
 class Hyperparameters(models.Model):
     """Singleton Django Model"""

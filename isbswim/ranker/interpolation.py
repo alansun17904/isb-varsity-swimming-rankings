@@ -7,38 +7,26 @@ event_codes = ['FLY50m', 'FR50m', 'BA50m', 'BR50m', 'FLY100m', 'FR100m',
         'BA100m', 'BR100m', 'FR200m', 'FR400m', 'IM100m', 'IM200m']
 
 hyp = Hyperparameters.objects.all()[0]
-pmale = len([v for v in Profile.objects.all() if v.sex == 'MALE'])
-pfemale = len([v for v in Profile.objects.all() if v.sex == 'FEMALE'])
+pmale = len(Profile.objects.filter(sex='MALE'))
+pfemale = len(Profile.objects.filter(sex='FEMALE'))
 weightfunc = Weight(hyp.weight_type, hyp.weight_a, hyp.h_index)
 bonus_matrix = hyp.bonus_matrix
 
-def calculate_entry_ranks():
-    # since the rankings for boys and girls are calculated separately
-    # this needs to be done in two iterations.
-    # calculate ranks for each event
-    # thus, we need to filter by event codes first
-    girls = [v for v in Entry.objects.all() if v.swimmer.sex == 'MALE']
-    boys = [v for v in Entry.objects.all() if v.swimmer.sex == 'FEMALE']
-
-    for bg in [girls, boys]:
-        for event in event_codes:
-            entries = [v for v in bg if v.event == event]
-            entries.sort(key=lambda x: float(x.time))
-            for rank, entry in enumerate(entries):
-                entry.rank = rank + 1
-                entry.save()
-
 def find_top_h(name, h, sex):
-    person = [v for v in Entry.objects.all()
-                if v.swimmer.user.username == name]
+    person = Entry.objects.filter(
+            swimmer__user__username=name
+    ).order_by('rank')
     ranks = [v.rank for v in person]
     events = {}
 
-    ranks.sort()
     if len(ranks) < hyp.h_index:
         ranks += [pmale if sex == 'MALE' else pfemale] * (hyp.h_index - len(ranks))
 
-    score = _sum_ranks(ranks)
+    score = sum(ranks[0:hyp.h_index])
+    versatility = _versatility(ranks)
+
+    # add versatility to score
+    score += versatility
 
     # add all events into dictionary for ease of assigning bonuses
     for entry in person:
@@ -47,13 +35,13 @@ def find_top_h(name, h, sex):
         time = entry.time
         meet = entry.meet
         events[event] = (rank, time, meet)
-    return [score, events, name]
+    return [score, events, name, versatility]
 
-def _sum_ranks(ranks):
-    score = 0
-    for i in range(len(ranks)):
-        score += ranks[i] * weightfunc.weighting(i + 1)
-    return score
+def _versatility(ranks):
+    versatility = 0
+    for i in range(1, len(ranks)):
+        versatility += (ranks[i] - ranks[i-1]) * weightfunc.weighting(i + 1)
+    return versatility
 
 def _assign_bonus(name, event_dict):
     bonus = 0.0
@@ -83,7 +71,9 @@ def rank(sex='FEMALE'):
     names = [v.user.username for v in Profile.objects.all() if v.sex == sex]
     for name in names:
         rank = find_top_h(name, hyp.h_index, sex)
-        rank[0] = (1 - _assign_bonus(name, rank[1])) * rank[0]
+        bonus = _assign_bonus(name, rank[1])
+        rank[0] = (1 - bonus) * rank[0]
+        rank.append(bonus)
         rankings.append(rank)
     rankings.sort(key=lambda x: x[0])
     return rankings

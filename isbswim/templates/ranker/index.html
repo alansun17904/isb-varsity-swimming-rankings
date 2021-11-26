@@ -1,10 +1,72 @@
 {% extends "ranker/base.html" %}
+{% load extras %}
 {% block body_block %}
   {% if user.is_authenticated %}
   <h1>Welcome to ISB Varsity Swimming, {{ user.first_name }}!</h1>
   <p>This is the home page.</p>
   <p>Please either proceed to the rankings by clicking on the "rankings" link in the
   navigation bar.</p>
+  <h2>User Information</h2>
+  <p>
+    <b>Name:</b> {{ profile.user.first_name }} {{ profile.user.last_name }}<br>
+    <b>Sex: </b> {{ profile.sex }}</b><br>
+    <b>Email:</b> {{ profile.user.email }}<br>
+    <b>Username:</b> {{ profile.user.username }}<br>
+    {% if profile.attendance %}
+    <b>You have attended all practices</b>
+    {% endif %}
+  </p>
+  <h2>Times</h2>
+  <p>
+  These are your times that are currently stored in the database.
+  </p>
+  <table>
+    <thead>
+      <th>Rank</th>
+      <th>Event</th>
+      <th>Time</th>
+      <th>Meet</th>
+    </thead>
+    {% for entry in entries %}
+    {% if entry.swimmer.user.username == user.username %}
+      {% if entry.approved %}
+      <tr class="approved">
+        <td>
+          </a>
+        </td>
+        <td><a href="{% url 'ranker:event_ranks' sex=entry.swimmer.sex event=entry.event %}">
+                {{ entry.event }}</td>
+        <td>{{ entry.time|shorttolong }}</td>
+        <td>{{ entry.meet }}</td>
+      </tr>
+      {% else %}
+      <tr class="not_approved">
+        <td>N/A</td>
+        <td>{{ entry.event }}</td>
+        <td>{{ entry.time|shorttolong }}</td>
+        <td>{{ entry.meet }}</td>
+      </tr>
+      {% endif %}
+    {% endif %}
+    {% endfor %}
+  </table>
+  <p>
+  Use the following form to add/update your times. Please note that 
+  any updates to the database needs to be approved by staff. Thus,
+  changes may not be reflected right away.
+  </p>
+  <p>
+  Please note that if your change has been approved it should turn green
+  in the entry box. Otherwise, it will remain red. Moreover, if the entry
+  you have submitted has been deleted after some time, this means that 
+  the change has been denied. Please see Coach Nic about inputting the
+  correct information.
+  </p>
+  <form method="POST">
+    {{ updateForm }}
+    {% csrf_token %}
+    <input type="submit" name="" value="Submit" class="btn btn-primary">
+  </form>
   {% else %}
   <h1>Welcome to ISB Varsity Swimming!</h1>
   <p>This is the home page.</p>

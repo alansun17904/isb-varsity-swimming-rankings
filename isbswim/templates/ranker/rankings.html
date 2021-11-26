@@ -1,15 +1,46 @@
 {% extends "ranker/base.html" %}
+{% load extras %}
 {% block body_block %}
   <h1>Rankings</h1>
-  <table class="MALE">
+  <table class="FEMALE column">
     <thead>
+      <th colspan={{ FEMALE.0|length }}>Girls' Rankings</th>
+    </thead>
+    <thead>
+      <th>Rank</th>
       <th>Name</th>
       <th>Score</th>
+      <th>Versatility</th>
+      <th>Bonus</th>
     </thead>
     {% for ranking in FEMALE %}
     <tr>
+      <td>{{ forloop.counter }}</td>
       <td>{{ ranking.2 }}</td> 
       <td>{{ ranking.0|floatformat:2 }}</td>
+      <td>{{ ranking.3|floatformat:2 }}</td>
+      <td>{{ ranking.4|multiply:100 }}%</td>
+    </tr>
+    {% endfor %}
+  </table>
+  <table class="MALE column">
+    <thead>
+      <th colspan={{ MALE.0|length }}>Boys' Rankings</th>
+    </thead>
+    <thead>
+      <th>Rank</th>
+      <th>Name</th>
+      <th>Score</th>
+      <th>Versatility</th>
+      <th>Bonus</th>
+    </thead>
+    {% for ranking in MALE %}
+    <tr>
+      <td>{{ forloop.counter }}</td>
+      <td>{{ ranking.2 }}</td> 
+      <td>{{ ranking.0|floatformat:2 }}</td>
+      <td>{{ ranking.3|floatformat:2 }}</td>
+      <td>{{ ranking.4|multiply:100 }}%</td>
     </tr>
     {% endfor %}
   </table>
