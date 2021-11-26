@@ -6,13 +6,11 @@ from ranker.weighting import Weight
 event_codes = ['FLY50m', 'FR50m', 'BA50m', 'BR50m', 'FLY100m', 'FR100m',
         'BA100m', 'BR100m', 'FR200m', 'FR400m', 'IM100m', 'IM200m']
 
-hyp = Hyperparameters.objects.all()[0]
-pmale = len(Profile.objects.filter(sex='MALE'))
-pfemale = len(Profile.objects.filter(sex='FEMALE'))
-weightfunc = Weight(hyp.weight_type, hyp.weight_a, hyp.h_index)
-bonus_matrix = hyp.bonus_matrix
-
 def find_top_h(name, h, sex):
+    hyp = Hyperparameters.objects.all()[0]
+    pmale = len(Profile.objects.filter(sex='MALE'))
+    pfemale = len(Profile.objects.filter(sex='FEMALE'))
+
     person = Entry.objects.filter(
             swimmer__user__username=name
     ).order_by('rank')
@@ -38,12 +36,16 @@ def find_top_h(name, h, sex):
     return [score, events, name, versatility]
 
 def _versatility(ranks):
+    hyp = Hyperparameters.objects.all()[0]
+    weightfunc = Weight(hyp.weight_type, hyp.weight_a, hyp.h_index)
     versatility = 0
     for i in range(1, len(ranks)):
         versatility += (ranks[i] - ranks[i-1]) * weightfunc.weighting(i + 1)
     return versatility
 
 def _assign_bonus(name, event_dict):
+    hyp = Hyperparameters.objects.all()[0]
+    bonus_matrix = hyp.bonus_matrix
     bonus = 0.0
 
     # check for attendence bonus
@@ -67,6 +69,7 @@ def _assign_bonus(name, event_dict):
     return bonus
 
 def rank(sex='FEMALE'):
+    hyp = Hyperparameters.objects.all()[0]
     rankings = []
     names = [v.user.username for v in Profile.objects.all() if v.sex == sex]
     for name in names:
