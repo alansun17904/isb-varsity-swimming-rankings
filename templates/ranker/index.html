@@ -1,7 +1,7 @@
 {% extends "ranker/base.html" %}
 {% load extras %}
 {% block body_block %}
-  {% if user.is_authenticated and not user.is_staff %}
+  {% if user.is_authenticated and profile %}
   <h1>Welcome to ISB Varsity Swimming, {{ user.first_name }}!</h1>
   <p>This is the home page.</p>
   <p>Please either proceed to the rankings by clicking on the "rankings" link in the

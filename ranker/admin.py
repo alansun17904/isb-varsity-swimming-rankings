@@ -1,5 +1,6 @@
 from django import forms
-from ranker.forms import events, EntryFormAdmin, HyperparameterForm
+from ranker.forms import events, EntryFormAdmin
+from ranker.forms import HyperparameterForm, ProfileFormAdmin
 from django.contrib import admin
 from ranker.models import Profile, Entry, Hyperparameters
 from ranker.templatetags.extras import shorttolong
@@ -22,6 +23,7 @@ class ProfileAdmin(admin.ModelAdmin):
     list_filter = ['sex', 'attendance']
     list_display = ['user', 'sex', 'attendance', 'is_coach']
     actions = [approve_attendance]
+    form = ProfileFormAdmin
 
 class EntryAdmin(admin.ModelAdmin):
     list_filter = ['event', 'approved']

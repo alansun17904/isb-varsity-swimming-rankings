@@ -14,8 +14,10 @@ def index(request):
     form = EntryForm()
     profile = None
 
-    if request.user.is_authenticated and not request.user.is_staff:
+    if request.user.is_authenticated:
         profile = Profile.objects.all().get(user=request.user)
+        if profile.is_coach:
+            profile = None
     context = {'entries': Entry.objects.all(),
             'profile': profile,
             'updateForm': form}

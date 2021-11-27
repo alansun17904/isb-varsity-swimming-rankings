@@ -1,6 +1,6 @@
 import re
 from django import forms
-from ranker.models import Entry, Hyperparameters
+from ranker.models import Entry, Hyperparameters, Profile
 
 events = (('FR50m','FR50m'), ('FR100m','FR100m'), ('FR200m','FR200m'), ('FR400m','FR400m'),
         ('BR50m','BR50m'), ('BR100m','BR100m'), ('BA50m','BA50m'), ('BA100m','BA100m'),
@@ -55,3 +55,11 @@ class EntryFormAdmin(forms.ModelForm):
     class Meta:
         model = Entry
         exclude = ('rank',)
+
+class ProfileFormAdmin(forms.ModelForm):
+    sex = forms.ChoiceField(choices=(('MALE', 'Boy'), ('FEMALE', 'Girl')),
+            widget=forms.Select)
+    class Meta:
+        model = Profile
+        fields = '__all__'
+
