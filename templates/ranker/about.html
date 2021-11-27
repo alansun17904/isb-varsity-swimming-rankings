@@ -1,0 +1,82 @@
+{% extends "ranker/base.html" %}
+{% load static %}
+{% load extras %}
+{% block body_block %}
+  <h1>About</h1>
+  <p>This page contains information about the ranking methodologies. The rules
+  for this season, and a brief summary of the algorithm is shown below. For
+  more details, motivations, especially about the weighting functions please
+  see the <a href="{% static 'ranker/an-algorithm-for-varsity-swim-team-selection.pdf' %}">white paper,</a> authored by Alan Sun ('20) and Emory Sun ('22).</p>
+
+  <h2>Ranking Rules</h2>
+  <ul>
+  <li>Twelve events are used to determine the eligibility of participation
+  in the varsity team. These are listed below.</li>
+    <ul>
+      <li>50m Freestyle (FR50m)</li>
+      <li>100m Freestyle (FR100m)</li>
+      <li>200m Freestyle (FR200m)</li>
+      <li>400m Freestyle (FR400m)</li>
+      <li>50m Breaststroke (BR50m)</li>
+      <li>100m Breaststroke (BR100m)</li>
+      <li>50m Backstroke (BA50m)</li>
+      <li>100m Backstroke (BA100m)</li>
+      <li>50m Butterfly (FLY50m)</li>
+      <li>100m Butterfly (FLY100m)</li>
+      <li>100m Individual Medley (IM100m)</li>
+      <li>200m Individual Medley (IM200m)</li>
+    </ul>
+    <li>
+        To be considered for selection, each swimmer must swim a minimum of
+        {{ hyperparameters.h_index }} events. These events must be swam at an
+        approved varsity time trial eligible meet. If a swimmer has not
+        swam at least {{ hyperparameters.h_index }} events, then a penalty
+        will be added to their final score (the lower the better). This
+        penalty is dependent upon the number of people trying out.
+    </li>
+    <li>
+        Each swimmer's score will be determined by summing the ranks of their top
+        {{ hyperparameters.h_index }}
+        events, adding any outstanding penalities, and then subtracting the bonuses that
+        they've earned:
+        \[\text{score} = \sum_i \text{rank}_i + \text{versatility} - \text{bonus} + \text{penalties}.\]
+    </li>
+    {% if hyperparameters.attendance_bonus %}
+    <li>
+        If a swimmer attends all practices, then a bonus will be applied onto
+        their final score. This comes in the form of a percentage discount.
+        This year, the bonus weight will be
+        {{ hyperparameters.attendance_weight|multiply:100 }}%. Such that the 
+        final score will be calculated using the following equation:
+        \[\text{score} = (1 - w_a) \cdot \text{score},\]
+        where \(\text{score}\) represents the swimmers final ranked score, and 
+        \(w_a\) represents the bonus weight.
+    </li>
+    {% endif %}
+    <li>
+        The weighting function used this year is a {{ hyperparameters.weight_type }} 
+        function, with a hyperparameter of \(a ={{ hyperparameters.weight_a }}\). More about
+        the details of this function is presented in the white paper. In short, this weighted
+        function is used to determine the versatility of the given swimmer, the "steeper" the
+        weighting function, the more specialized swimmers can be.
+    </li>
+    <li>
+        For swimmers that achieve top ranks in certain events, a further bonus discount
+        will be applied to their score. This also comes in the form of a percentage. Analogous
+        to the attendance bonus. The bonuses corresponding to each event and their 
+        ranks are shown below:
+        <ul>
+          {% for k, v in hyperparameters.bonus_matrix.items %}
+          <li>
+              <b>{{ k }}</b>: 
+              {% for j in v %}
+              \(\text{Rank}={{ forloop.counter0|add:1 }}\), \(\text{Bonus}={{ j|multiply:100 }}\%\);
+              {% endfor %}
+          </li>
+          {% endfor %}
+        </ul>
+        Each swimmer may only have a maximum of two event bonuses applied to their final score.
+    </li>
+  </ul>
+
+{% endblock %}
