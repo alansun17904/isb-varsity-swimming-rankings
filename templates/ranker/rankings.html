@@ -16,7 +16,7 @@
     {% for ranking in FEMALE %}
     <tr>
       <td>{{ forloop.counter }}</td>
-      <td>{{ ranking.2 }}</td> 
+      <td><a href="{% url 'ranker:profile' username=ranking.2 %}">{{ ranking.2 }}</a></td> 
       <td>{{ ranking.0|floatformat:2 }}</td>
       <td>{{ ranking.3|floatformat:2 }}</td>
       <td>{{ ranking.4|multiply:100 }}%</td>
@@ -37,7 +37,7 @@
     {% for ranking in MALE %}
     <tr>
       <td>{{ forloop.counter }}</td>
-      <td>{{ ranking.2 }}</td> 
+      <td><a href="{% url 'ranker:profile' username=ranking.2 %}">{{ ranking.2 }}</a></td> 
       <td>{{ ranking.0|floatformat:2 }}</td>
       <td>{{ ranking.3|floatformat:2 }}</td>
       <td>{{ ranking.4|multiply:100 }}%</td>

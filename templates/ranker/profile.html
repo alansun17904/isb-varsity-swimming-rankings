@@ -1,0 +1,91 @@
+{% extends "ranker/base.html" %}
+{% load extras %}
+{% block body_block %}
+{% if user.is_authenticated and profile %}
+  <h1>{{ profile.user.first_name }} {{ profile.user.last_name}}</h1>
+  <p>
+    <b>Name:</b> {{ profile.user.first_name }} {{ profile.user.last_name }}<br>
+    <b>Sex: </b> {{ profile.sex }}</b><br>
+    <b>Email:</b> {{ profile.user.email }}<br>
+    <b>Username:</b> {{ profile.user.username }}<br>
+    {% if profile.attendance %}
+    <b>You have earned the attendance bonus</b>
+    {% endif %}
+  </p>
+  <h2>Attendance</h2>
+  <table>
+    <thead>
+      <th>Date</th>
+      <th>Attended</th>
+    </thead>
+    {% for practice in practices %}
+    <tr>
+      <td>{{ practice.date }}</td>
+      {% if practice|check_attendance:user %}
+      <td><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="green" class="bi bi-check-circle-fill" viewBox="0 0 16 16">
+        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+          </svg></td>
+      {% else %}
+      <td></td>
+      {% endif %}
+    </tr>
+  {% endfor %}
+  </table>
+
+  <h2>Times</h2>
+  <p>
+  These are the times that are currently stored in the database for this user.
+  </p>
+  <table>
+    <thead>
+      <th>Rank</th>
+      <th>Event</th>
+      <th>Time</th>
+      <th>Meet</th>
+    </thead>
+    {% for entry in entries %}
+    {% if entry.swimmer.user.username == profile.user.username %}
+      {% if entry.approved %}
+      <tr class="approved">
+        <td>
+            {{ entry.rank }}
+        </td>
+        <td>
+            <a href="{% url 'ranker:event_ranks' sex=entry.swimmer.sex event=entry.event %}">
+                {{ entry.event }}
+            </a>
+        <td>{{ entry.time|shorttolong }}</td>
+        <td>{{ entry.meet }}</td>
+      </tr>
+      {% else %}
+      <tr class="not_approved">
+        <td>N/A</td>
+        <td>{{ entry.event }}</td>
+        <td>{{ entry.time|shorttolong }}</td>
+        <td>{{ entry.meet }}</td>
+      </tr>
+      {% endif %}
+    {% endif %}
+    {% endfor %}
+  </table>
+  {% if user.username == profile.user.username %}
+  <p>
+  Use the following form to add/update your times. Please note that
+  any updates to the database needs to be approved by staff. Thus,
+  changes may not be reflected right away.
+  </p>
+  <p>
+  Please note that if your change has been approved it should turn green
+  in the entry box. Otherwise, it will remain red. Moreover, if the entry
+  you have submitted has been deleted after some time, this means that
+  the change has been denied. Please see Coach Nic about inputting the
+  correct information.
+  </p>
+  <form method="POST">
+    {{ updateForm }}
+    {% csrf_token %}
+    <input type="submit" name="" value="Submit" class="btn btn-primary">
+  </form>
+  {% endif %}
+{% endif %}
+{% endblock %}

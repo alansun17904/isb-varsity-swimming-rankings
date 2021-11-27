@@ -11,20 +11,21 @@ from ranker.forms import EntryForm
 
 # Create your views here.
 def index(request):
-    form = EntryForm()
-    profile = None
-    practices = None
+    return render(request, 'ranker/index.html')
 
-    if request.user.is_authenticated:
-        profile = Profile.objects.all().get(user=request.user)
-        practices = Practice.objects.all()
-        if profile.is_coach:
-            profile = None
-            practices = None
-    context = {'entries': Entry.objects.all(),
-            'profile': profile,
-            'practices': practices,
-            'updateForm': form}
+@login_required
+def profile(request, username):
+    profile = Profile.objects.get(user__username=username)
+    practices = Practice.objects.all()
+    entries = Entry.objects.all()
+    form = EntryForm()
+
+    context = {
+        'updateForm': form,
+        'entries': entries,
+        'profile': profile,
+        'practices': practices
+    }
     if request.method == 'POST':
         form = EntryForm(request.POST)
         if form.is_valid():
@@ -36,7 +37,7 @@ def index(request):
             return HttpResponseRedirect(reverse('index'))
         return HttpResponse("The data submitted was invalid. Please check your \
                 formatting and try again (especially for the time field)")
-    return render(request, 'ranker/index.html', context)
+    return render(request, "ranker/profile.html", context=context)
 
 def about(request):
     hyp = Hyperparameters.objects.all()[0]
