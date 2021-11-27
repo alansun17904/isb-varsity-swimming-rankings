@@ -21,7 +21,10 @@ def find_top_h(name, h, sex):
         ranks += [pmale if sex == 'MALE' else pfemale] * (hyp.h_index - len(ranks))
 
     score = sum(ranks[0:hyp.h_index])
-    versatility = _versatility(ranks)
+    if hyp.weight_type != 'none':
+        versatility = _versatility(ranks)
+    else:
+        versatility = 0
 
     # add versatility to score
     score += versatility
