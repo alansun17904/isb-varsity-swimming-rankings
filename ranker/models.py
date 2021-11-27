@@ -8,7 +8,7 @@ class Profile(models.Model):
     freely access and modify the database.
     """
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    sex = models.CharField(max_length=5)
+    sex = models.CharField(max_length=6)
     attendance = models.BooleanField(default=False)
     is_coach = models.BooleanField(default=False)
 
