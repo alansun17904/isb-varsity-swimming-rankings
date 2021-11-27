@@ -8,8 +8,8 @@ event_codes = ['FLY50m', 'FR50m', 'BA50m', 'BR50m', 'FLY100m', 'FR100m',
 
 def find_top_h(name, h, sex):
     hyp = Hyperparameters.objects.all()[0]
-    pmale = len(Profile.objects.filter(sex='MALE'))
-    pfemale = len(Profile.objects.filter(sex='FEMALE'))
+    pmale = len(Profile.objects.filter(sex='MALE', is_coach=False))
+    pfemale = len(Profile.objects.filter(sex='FEMALE', is_coach=False))
 
     person = Entry.objects.filter(
             swimmer__user__username=name

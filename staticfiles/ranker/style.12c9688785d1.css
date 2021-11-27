@@ -31,11 +31,12 @@ table, td, th {
 }
 
 footer {
-  width: 100%;
   text-align: center;
-  position: fixed;
+  position: relative;
+  margin-top: -180px;
   /* negative value of footer height */
-  bottom: 0;
+  height: 180px;
+  clear: both;
 }
 
 .column {

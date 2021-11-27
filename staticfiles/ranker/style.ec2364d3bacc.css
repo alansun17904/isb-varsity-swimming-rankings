@@ -31,7 +31,6 @@ table, td, th {
 }
 
 footer {
-  width: 100%;
   text-align: center;
   position: fixed;
   /* negative value of footer height */
