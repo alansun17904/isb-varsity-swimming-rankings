@@ -70,7 +70,7 @@
           <li>
               <b>{{ k }}</b>: 
               {% for j in v %}
-              \(\text{Rank}={{ forloop.counter0|add:1 }}\), \(\text{Bonus}={{ j }}\);
+              \(\text{Rank}={{ forloop.counter0|add:1 }}\), \(\text{Bonus}={{ j|multiply:100 }}\%\);
               {% endfor %}
           </li>
           {% endfor %}
