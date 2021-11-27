@@ -2,7 +2,7 @@ from django import forms
 from ranker.forms import events, EntryFormAdmin
 from ranker.forms import HyperparameterForm, ProfileFormAdmin
 from django.contrib import admin
-from ranker.models import Profile, Entry, Hyperparameters
+from ranker.models import Profile, Entry, Hyperparameters, Practice
 from ranker.templatetags.extras import shorttolong
 
 # Register your models here.
@@ -48,3 +48,4 @@ class EntryAdmin(admin.ModelAdmin):
 admin.site.register(Entry, EntryAdmin)
 admin.site.register(Profile, ProfileAdmin)
 admin.site.register(Hyperparameters, HyperparametersAdmin)
+admin.site.register(Practice)

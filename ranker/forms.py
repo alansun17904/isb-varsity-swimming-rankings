@@ -7,7 +7,8 @@ events = (('FR50m','FR50m'), ('FR100m','FR100m'), ('FR200m','FR200m'), ('FR400m'
         ('FLY50m','FLY50m'), ('FLY100m','FLY100m'), ('IM100m','IM100m'), ('IM200m','IM200m'))
 
 weightfuncs = (('linear', 'linear'), ('polynomial', 'polynomial'), ('uniform', 'uniform'),
-                ('exponential', 'exponential'), ('sigmoidal', 'sigmoidal'))
+                ('exponential', 'exponential'), ('sigmoidal', 'sigmoidal'),
+                ('none', 'none'))
 
 class HyperparameterForm(forms.ModelForm):
     weight_type = forms.ChoiceField(choices=weightfuncs, widget=forms.Select)

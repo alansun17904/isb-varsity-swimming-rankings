@@ -15,3 +15,7 @@ def shorttolong(value):
         seconds = int(value - minutes * 60)
         milliseconds = int((value - minutes * 60 - seconds) * 100)
         return f'{int(minutes)}:{round(seconds):02d}.{milliseconds:02d}'
+
+@register.filter(name='check_attendance')
+def check_attendance(value, user):
+    return value.check_attendance(user)

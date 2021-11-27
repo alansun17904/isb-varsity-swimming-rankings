@@ -4,7 +4,7 @@ from django.urls import reverse
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
-from ranker.models import Entry, Hyperparameters, Profile
+from ranker.models import Entry, Hyperparameters, Profile, Practice
 from django.contrib.auth.models import User
 from ranker.interpolation import rank
 from ranker.forms import EntryForm
@@ -13,13 +13,17 @@ from ranker.forms import EntryForm
 def index(request):
     form = EntryForm()
     profile = None
+    practices = None
 
     if request.user.is_authenticated:
         profile = Profile.objects.all().get(user=request.user)
+        practices = Practice.objects.all()
         if profile.is_coach:
             profile = None
+            practices = None
     context = {'entries': Entry.objects.all(),
             'profile': profile,
+            'practices': practices,
             'updateForm': form}
     if request.method == 'POST':
         form = EntryForm(request.POST)

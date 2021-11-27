@@ -59,3 +59,14 @@ class Hyperparameters(models.Model):
 
     def __str__(self):
         return f'h={self.h_index}, wt={self.weight_type}, a={self.weight_a}'
+
+class Practice(models.Model):
+    date = models.DateField()
+    swimmers = models.ManyToManyField(Profile, blank=True)
+
+    def check_attendance(self, user):
+        return user.username in [v.user.username for v in self.swimmers.all()]
+
+    def __str__(self):
+        return str(self.date)
+
