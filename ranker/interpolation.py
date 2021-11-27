@@ -71,7 +71,7 @@ def _assign_bonus(name, event_dict):
 def rank(sex='FEMALE'):
     hyp = Hyperparameters.objects.all()[0]
     rankings = []
-    names = [v.user.username for v in Profile.objects.all() if v.sex == sex]
+    names = [v.user.username for v in Profile.objects.all().filter(is_coach=False) if v.sex == sex]
     for name in names:
         rank = find_top_h(name, hyp.h_index, sex)
         bonus = _assign_bonus(name, rank[1])
