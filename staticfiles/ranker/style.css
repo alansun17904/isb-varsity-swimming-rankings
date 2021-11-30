@@ -25,6 +25,10 @@ table, td, th {
   text-align: center;
 }
 
+tr {
+  height: auto;
+}
+
 .event_ranks {
   margin-left: auto;
   margin-right: auto;
@@ -42,4 +46,9 @@ footer {
   float: left;
   width: 45%;
   padding: 5px;
+}
+
+#home {
+  top: 50%;
+  left: 50%;
 }
