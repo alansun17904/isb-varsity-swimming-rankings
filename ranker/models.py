@@ -8,7 +8,7 @@ class Profile(models.Model):
     freely access and modify the database.
     """
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    sex = models.CharField(max_length=5)
+    sex = models.CharField(max_length=6)
     attendance = models.BooleanField(default=False)
     is_coach = models.BooleanField(default=False)
 
@@ -29,12 +29,14 @@ class Entry(models.Model):
     approved = models.BooleanField(default=False)
 
     @classmethod
-    def recalculate_entry_ranks(cls, sex, event):
+    def rerank(cls, sex, event, time):
         event = Entry.objects.filter(event=event,
                 swimmer__sex=sex).order_by('time')
-        for rank, entry in enumerate(event):
-            entry.rank = rank + 1
-            entry.save()
+        rank = 0
+        for entry in event:
+            if event.time < time:
+                rank += 1
+        return rank + 1
 
     def __str__(self):
         return f'{str(self.swimmer)}: {self.event}'
@@ -59,3 +61,14 @@ class Hyperparameters(models.Model):
 
     def __str__(self):
         return f'h={self.h_index}, wt={self.weight_type}, a={self.weight_a}'
+
+class Practice(models.Model):
+    date = models.DateField(unique=True)
+    swimmers = models.ManyToManyField(Profile, blank=True)
+
+    def check_attendance(self, user):
+        return user.username in [v.user.username for v in self.swimmers.all()]
+
+    def __str__(self):
+        return str(self.date)
+

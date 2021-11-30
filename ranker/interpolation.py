@@ -8,11 +8,12 @@ event_codes = ['FLY50m', 'FR50m', 'BA50m', 'BR50m', 'FLY100m', 'FR100m',
 
 def find_top_h(name, h, sex):
     hyp = Hyperparameters.objects.all()[0]
-    pmale = len(Profile.objects.filter(sex='MALE'))
-    pfemale = len(Profile.objects.filter(sex='FEMALE'))
+    pmale = len(Profile.objects.filter(sex='MALE', is_coach=False))
+    pfemale = len(Profile.objects.filter(sex='FEMALE', is_coach=False))
 
     person = Entry.objects.filter(
-            swimmer__user__username=name
+            swimmer__user__username=name,
+            approved=True
     ).order_by('rank')
     ranks = [v.rank for v in person]
     events = {}
@@ -21,7 +22,10 @@ def find_top_h(name, h, sex):
         ranks += [pmale if sex == 'MALE' else pfemale] * (hyp.h_index - len(ranks))
 
     score = sum(ranks[0:hyp.h_index])
-    versatility = _versatility(ranks)
+    if hyp.weight_type != 'none':
+        versatility = _versatility(ranks)
+    else:
+        versatility = 0
 
     # add versatility to score
     score += versatility
@@ -71,7 +75,7 @@ def _assign_bonus(name, event_dict):
 def rank(sex='FEMALE'):
     hyp = Hyperparameters.objects.all()[0]
     rankings = []
-    names = [v.user.username for v in Profile.objects.all() if v.sex == sex]
+    names = [v.user.username for v in Profile.objects.all().filter(is_coach=False) if v.sex == sex]
     for name in names:
         rank = find_top_h(name, hyp.h_index, sex)
         bonus = _assign_bonus(name, rank[1])

@@ -4,23 +4,28 @@ from django.urls import reverse
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
-from ranker.models import Entry, Hyperparameters, Profile
+from ranker.models import Entry, Hyperparameters, Profile, Practice
 from django.contrib.auth.models import User
 from ranker.interpolation import rank
 from ranker.forms import EntryForm
 
 # Create your views here.
 def index(request):
-    form = EntryForm()
-    profile = None
+    return render(request, 'ranker/index.html')
 
-    if request.user.is_authenticated:
-        profile = Profile.objects.all().get(user=request.user)
-        if profile.is_coach:
-            profile = None
-    context = {'entries': Entry.objects.all(),
-            'profile': profile,
-            'updateForm': form}
+@login_required
+def profile(request, username):
+    profile = Profile.objects.get(user__username=username)
+    practices = Practice.objects.all().order_by('date')
+    entries = Entry.objects.all()
+    form = EntryForm()
+
+    context = {
+        'updateForm': form,
+        'entries': entries,
+        'profile': profile,
+        'practices': practices
+    }
     if request.method == 'POST':
         form = EntryForm(request.POST)
         if form.is_valid():
@@ -29,10 +34,10 @@ def index(request):
                     meet=form.cleaned_data['meet'],
                     swimmer=profile)
             entry.save()
-            return HttpResponseRedirect(reverse('index'))
+            return render(request, "ranker/profile.html", context=context)
         return HttpResponse("The data submitted was invalid. Please check your \
                 formatting and try again (especially for the time field)")
-    return render(request, 'ranker/index.html', context)
+    return render(request, "ranker/profile.html", context=context)
 
 def about(request):
     hyp = Hyperparameters.objects.all()[0]
@@ -73,6 +78,6 @@ def rankings(request):
 @login_required
 def event_ranks(request, sex, event):
     entries = Entry.objects.filter(swimmer__sex=sex,
-            event=event).order_by('rank')
+            event=event, approved=True).order_by('rank')
     context = {'entries': entries}
     return render(request, 'ranker/event_ranks.html', context)
