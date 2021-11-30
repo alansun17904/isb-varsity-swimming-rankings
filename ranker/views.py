@@ -16,7 +16,7 @@ def index(request):
 @login_required
 def profile(request, username):
     profile = Profile.objects.get(user__username=username)
-    practices = Practice.objects.all()
+    practices = Practice.objects.all().order_by('date')
     entries = Entry.objects.all()
     form = EntryForm()
 

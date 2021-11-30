@@ -61,7 +61,7 @@ class Hyperparameters(models.Model):
         return f'h={self.h_index}, wt={self.weight_type}, a={self.weight_a}'
 
 class Practice(models.Model):
-    date = models.DateField()
+    date = models.DateField(unique=True)
     swimmers = models.ManyToManyField(Profile, blank=True)
 
     def check_attendance(self, user):

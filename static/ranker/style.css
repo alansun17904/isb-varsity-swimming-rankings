@@ -25,6 +25,10 @@ table, td, th {
   text-align: center;
 }
 
+tr {
+  height: auto;
+}
+
 .event_ranks {
   margin-left: auto;
   margin-right: auto;
