@@ -1,4 +1,5 @@
 from django import template
+from ranker.models import Profile
 
 register = template.Library()
 
@@ -19,3 +20,10 @@ def shorttolong(value):
 @register.filter(name='check_attendance')
 def check_attendance(value, user):
     return value.check_attendance(user)
+
+@register.filter(name='is_coach')
+def is_coach(user):
+    p = Profile.objects.get(user__username=user.username)
+    return p.is_coach
+
+

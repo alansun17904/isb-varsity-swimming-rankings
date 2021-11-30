@@ -1,4 +1,5 @@
 {% load static %}
+{% load extras %}
 <!DOCTYPE html>
 <html>
   <head>
@@ -23,8 +24,13 @@
           <li class="nav-item"><a class="nav-link" href="{% url 'ranker:about' %}">About</a></li>
           {% if user.is_authenticated %}
           <li class="nav-item"><a class="nav-link" href="{% url 'ranker:rankings' %}">Rankings</a></li>
+          {% if user.is_staff %}
           <li class="nav-item"><a class="nav-link" href="{% url 'admin:index' %}">Staff</a></li>
+          {% endif %}
+          {% if user|is_coach %}
+          {% else %}
           <li class="nav-item"><a class="nav-link" href="{% url 'ranker:profile' username=user.username %}">Profile</a></li>
+          {% endif %}
           <li class="nav-item"><a class="nav-link" href="{% url 'ranker:logout' %}">Logout</a></li>
           {% else %}
           <li class="nav-item"><a class="nav-link" href="{% url 'ranker:login' %}">Login</a></li>
