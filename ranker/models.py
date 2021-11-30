@@ -29,12 +29,14 @@ class Entry(models.Model):
     approved = models.BooleanField(default=False)
 
     @classmethod
-    def recalculate_entry_ranks(cls, sex, event):
+    def rerank(cls, sex, event, time):
         event = Entry.objects.filter(event=event,
                 swimmer__sex=sex).order_by('time')
-        for rank, entry in enumerate(event):
-            entry.rank = rank + 1
-            entry.save()
+        rank = 0
+        for entry in event:
+            if event.time < time:
+                rank += 1
+        return rank + 1
 
     def __str__(self):
         return f'{str(self.swimmer)}: {self.event}'

@@ -12,7 +12,8 @@ def find_top_h(name, h, sex):
     pfemale = len(Profile.objects.filter(sex='FEMALE', is_coach=False))
 
     person = Entry.objects.filter(
-            swimmer__user__username=name
+            swimmer__user__username=name,
+            approved=True
     ).order_by('rank')
     ranks = [v.rank for v in person]
     events = {}

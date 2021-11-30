@@ -34,7 +34,7 @@ def profile(request, username):
                     meet=form.cleaned_data['meet'],
                     swimmer=profile)
             entry.save()
-            return HttpResponseRedirect(reverse('index'))
+            return render(request, "ranker/profile.html", context=context)
         return HttpResponse("The data submitted was invalid. Please check your \
                 formatting and try again (especially for the time field)")
     return render(request, "ranker/profile.html", context=context)
@@ -78,6 +78,6 @@ def rankings(request):
 @login_required
 def event_ranks(request, sex, event):
     entries = Entry.objects.filter(swimmer__sex=sex,
-            event=event).order_by('rank')
+            event=event, approved=True).order_by('rank')
     context = {'entries': entries}
     return render(request, 'ranker/event_ranks.html', context)
