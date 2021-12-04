@@ -1,5 +1,6 @@
 {% extends "ranker/base.html" %}
 {% load extras %}
+{% load bootstrap5 %}
 {% block body_block %}
 {% if user.is_authenticated and profile %}
   <h1>{{ profile.user.first_name }} {{ profile.user.last_name}}</h1>
@@ -82,9 +83,11 @@
   correct information.
   </p>
   <form method="POST">
-    {{ updateForm }}
+    {% bootstrap_form updateForm %}
     {% csrf_token %}
+    {% buttons %}
     <input type="submit" name="" value="Submit" class="btn btn-primary">
+    {% endbuttons %}
   </form>
   {% endif %}
 {% endif %}
