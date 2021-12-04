@@ -2,6 +2,14 @@ h1 {
   text-align: center;
 }
 
+.approved {
+  background: lightgreen;
+}
+
+.not_approved {
+  background: pink;
+}
+
 tr {
   height: auto;
 }

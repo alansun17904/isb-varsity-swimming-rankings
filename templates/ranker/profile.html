@@ -14,7 +14,7 @@
     {% endif %}
   </p>
   <h2>Attendance</h2>
-  <table>
+  <table class="table table-hover">
     <thead>
       <th>Date</th>
       <th>Attended</th>
@@ -37,7 +37,7 @@
   <p>
   These are the times that are currently stored in the database for this user.
   </p>
-  <table>
+  <table class="table table-hover">
     <thead>
       <th>Rank</th>
       <th>Event</th>
@@ -47,7 +47,7 @@
     {% for entry in entries %}
     {% if entry.swimmer.user.username == profile.user.username %}
       {% if entry.approved %}
-      <tr class="approved">
+      <tr class="table-success">
         <td>
             {{ entry.rank }}
         </td>
@@ -59,7 +59,7 @@
         <td>{{ entry.meet }}</td>
       </tr>
       {% else %}
-      <tr class="not_approved">
+      <tr class="table-danger">
         <td>N/A</td>
         <td>{{ entry.event }}</td>
         <td>{{ entry.time|shorttolong }}</td>
