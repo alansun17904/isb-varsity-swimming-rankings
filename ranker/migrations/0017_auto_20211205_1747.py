@@ -13,11 +13,6 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AddField(
-            model_name='entry',
-            name='rank',
-            field=models.IntegerField(default=0),
-        ),
         migrations.AlterField(
             model_name='profile',
             name='user',
