@@ -3,7 +3,9 @@
 {% load bootstrap5 %}
 {% block body_block %}
     {% if user.is_authenticated and profile %}
-        <h1>{{ profile.user.first_name }} {{ profile.user.last_name }}</h1>
+        <div class="jumbotron">
+        <h1 class="display-4">{{ profile.user.first_name }} {{ profile.user.last_name }}</h1>
+        <hr class="my-4">
         <p>
             <b>Name:</b> {{ profile.user.first_name }} {{ profile.user.last_name }}<br>
             <b>Sex: </b> {{ profile.sex }}</b><br>
@@ -13,6 +15,7 @@
                 <b>You have earned the attendance bonus</b>
             {% endif %}
         </p>
+        </div>
         <h2>Attendance</h2>
         <table class="table table-hover">
             <thead>
