@@ -33,6 +33,9 @@ Please note that the casing of the codes is also significant.
 
 ## Contributing
 To start, please see the issues page for any outstanding features/problems with the website.
+Those interested in contributing can learn about the structure of the project and its implementation
+quickly through the [design specifications](https://github.com/alansun17904/isb-varsity-swimming-rankings/blob/main/DESIGN.md)
+and the implementation specifications.
 
 ## Usage
 Usage comes in three stages: data entry, hyperparameter determination, and ranking.
