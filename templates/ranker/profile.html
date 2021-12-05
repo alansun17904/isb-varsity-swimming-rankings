@@ -2,93 +2,103 @@
 {% load extras %}
 {% load bootstrap5 %}
 {% block body_block %}
-{% if user.is_authenticated and profile %}
-  <h1>{{ profile.user.first_name }} {{ profile.user.last_name}}</h1>
-  <p>
-    <b>Name:</b> {{ profile.user.first_name }} {{ profile.user.last_name }}<br>
-    <b>Sex: </b> {{ profile.sex }}</b><br>
-    <b>Email:</b> {{ profile.user.email }}<br>
-    <b>Username:</b> {{ profile.user.username }}<br>
-    {% if profile.attendance %}
-    <b>You have earned the attendance bonus</b>
-    {% endif %}
-  </p>
-  <h2>Attendance</h2>
-  <table class="table table-hover">
-    <thead>
-      <th>Date</th>
-      <th>Attended</th>
-    </thead>
-    {% for practice in practices %}
-    <tr>
-      <td>{{ practice.date }}</td>
-      {% if practice|check_attendance:profile.user %}
-      <td><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="green" class="bi bi-check-circle-fill" viewBox="0 0 16 16">
-        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
-          </svg></td>
-      {% else %}
-      <td></td>
-      {% endif %}
-    </tr>
-  {% endfor %}
-  </table>
+    {% if user.is_authenticated and profile %}
+        <div class="jumbotron">
+        <h1 class="display-4">{{ profile.user.first_name }} {{ profile.user.last_name }}</h1>
+        <hr class="my-4">
+        <p>
+            <b>Name:</b> {{ profile.user.first_name }} {{ profile.user.last_name }}<br>
+            <b>Sex: </b> {{ profile.sex }}</b><br>
+            <b>Email:</b> {{ profile.user.email }}<br>
+            <b>Username:</b> {{ profile.user.username }}<br>
+            {% if profile.attendance %}
+                <b>You have earned the attendance bonus</b>
+            {% endif %}
+        </p>
+        </div>
+        <h2>Attendance</h2>
+        <table class="table table-hover">
+            <thead>
+            <th>Date</th>
+            <th>Attended</th>
+            </thead>
+            {% for practice in practices %}
+                <tr>
+                    <td>{{ practice.date }}</td>
+                    {% if practice|check_attendance:profile.user %}
+                        <td>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="green"
+                                 class="bi bi-check-circle-fill" viewBox="0 0 16 16">
+                                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+                            </svg>
+                        </td>
+                    {% else %}
+                        <td></td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+        </table>
 
-  <h2>Times</h2>
-  <p>
-  These are the times that are currently stored in the database for this user.
-  </p>
-  <table class="table table-hover">
-    <thead>
-      <th>Rank</th>
-      <th>Event</th>
-      <th>Time</th>
-      <th>Meet</th>
-    </thead>
-    {% for entry in entries %}
-    {% if entry.swimmer.user.username == profile.user.username %}
-      {% if entry.approved %}
-      <tr class="table-success">
-        <td>
-            {{ entry.rank }}
-        </td>
-        <td>
-            <a href="{% url 'ranker:event_ranks' sex=entry.swimmer.sex event=entry.event %}">
-                {{ entry.event }}
-            </a>
-        <td>{{ entry.time|shorttolong }}</td>
-        <td>{{ entry.meet }}</td>
-      </tr>
-      {% else %}
-      <tr class="table-danger">
-        <td>N/A</td>
-        <td>{{ entry.event }}</td>
-        <td>{{ entry.time|shorttolong }}</td>
-        <td>{{ entry.meet }}</td>
-      </tr>
-      {% endif %}
+        <h2>Times</h2>
+        <p>
+            These are the times that are currently stored in the database for this user.
+            Please note that if your change has been approved it should turn green
+            in the entry box. Otherwise, it will remain red. Moreover, if the entry
+            you have submitted has been deleted after some time, this means that
+            the change has been denied. Please see Coach Nic about inputting the
+            correct information.
+        </p>
+        <table class="table table-hover">
+            <thead>
+            <th>Rank</th>
+            <th>Event</th>
+            <th>Time</th>
+            <th>Meet</th>
+            {% ifequal user.username profile.user.username %}
+                <th>Actions</th>
+            {% endifequal %}
+            </thead>
+            {% for entry in entries %}
+                {% if entry.swimmer.user.username == profile.user.username %}
+                    {% if entry.approved %}
+                        <tr class="table-success">
+                            <td>
+                                {{ entry.rank }}
+                            </td>
+                            <td>
+                                <a href="{% url 'ranker:event_ranks' sex=entry.swimmer.sex event=entry.event %}">
+                                    {{ entry.event }}
+                                </a>
+                            <td>{{ entry.time|shorttolong }}</td>
+                            <td>{{ entry.meet }}</td>
+                            {% ifequal user.username profile.user.username %}
+                                <td>
+                                    <a class="btn btn-warning" href="{% url 'ranker:entry_edit' pk=entry.pk %}">Edit</a>
+                                    <a class="btn btn-danger" href="{% url 'ranker:entry_delete' pk=entry.pk %}">Delete</a>
+                                </td>
+                            {% endifequal %}
+                        </tr>
+                    {% else %}
+                        <tr class="table-danger">
+                            <td>N/A</td>
+                            <td>{{ entry.event }}</td>
+                            <td>{{ entry.time|shorttolong }}</td>
+                            <td>{{ entry.meet }}</td>
+                            {% ifequal user.username profile.user.username %}
+                                <td>
+                                    <a class="btn btn-warning" href="{% url 'ranker:entry_edit' pk=entry.pk %}">Edit</a>
+                                    <a class="btn btn-danger" href="{% url 'ranker:entry_delete' pk=entry.pk %}">Delete</a>
+                                </td>
+                            {% endifequal %}
+                        </tr>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+        </table>
+        {% if user.username == profile.user.username %}
+            <div class="d-grid gap-2 col-6 mx-auto">
+                <a class="btn btn-success" href="{% url 'ranker:entry_create' %}">Add</a>
+            </div>
+        {% endif %}
     {% endif %}
-    {% endfor %}
-  </table>
-  {% if user.username == profile.user.username %}
-  <p>
-  Use the following form to add/update your times. Please note that
-  any updates to the database needs to be approved by staff. Thus,
-  changes may not be reflected right away.
-  </p>
-  <p>
-  Please note that if your change has been approved it should turn green
-  in the entry box. Otherwise, it will remain red. Moreover, if the entry
-  you have submitted has been deleted after some time, this means that
-  the change has been denied. Please see Coach Nic about inputting the
-  correct information.
-  </p>
-  <form method="POST">
-    {% bootstrap_form updateForm %}
-    {% csrf_token %}
-    {% buttons %}
-    <input type="submit" name="" value="Submit" class="btn btn-primary">
-    {% endbuttons %}
-  </form>
-  {% endif %}
-{% endif %}
 {% endblock %}

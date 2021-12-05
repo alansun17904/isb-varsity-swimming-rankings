@@ -1,5 +1,5 @@
 from django import template
-from ranker.models import Profile
+from ranker.models import Profile, User
 
 register = template.Library()
 
@@ -25,5 +25,4 @@ def check_attendance(value, user):
 def is_coach(user):
     p = Profile.objects.get(user__username=user.username)
     return p.is_coach
-
 

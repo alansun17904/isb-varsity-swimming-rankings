@@ -1,53 +1,54 @@
 {% extends "ranker/base.html" %}
 {% load extras %}
 {% block body_block %}
-  <h1>Rankings</h1>
-  <div class="row">
-  <div class="col">
-  <table class="table table-hover FEMALE">
-    <thead>
-      <th colspan={{ FEMALE.0|length }}>Girls' Rankings</th>
-    </thead>
-    <thead>
-      <th>Rank</th>
-      <th>Name</th>
-      <th>Score</th>
-      <th>Versatility</th>
-      <th>Bonus</th>
-    </thead>
-    {% for ranking in FEMALE %}
-    <tr>
-      <td>{{ forloop.counter }}</td>
-      <td><a href="{% url 'ranker:profile' username=ranking.2 %}">{{ ranking.2 }}</a></td> 
-      <td>{{ ranking.0|floatformat:2 }}</td>
-      <td>{{ ranking.3|floatformat:2 }}</td>
-      <td>{{ ranking.4|multiply:100 }}%</td>
-    </tr>
-    {% endfor %}
-  </table>
-  </div>
-  <div class="col">
-  <table class="table table-hover MALE">
-    <thead>
-      <th colspan={{ MALE.0|length }}>Boys' Rankings</th>
-    </thead>
-    <thead>
-      <th>Rank</th>
-      <th>Name</th>
-      <th>Score</th>
-      <th>Versatility</th>
-      <th>Bonus</th>
-    </thead>
-    {% for ranking in MALE %}
-    <tr>
-      <td>{{ forloop.counter }}</td>
-      <td><a href="{% url 'ranker:profile' username=ranking.2 %}">{{ ranking.2 }}</a></td> 
-      <td>{{ ranking.0|floatformat:2 }}</td>
-      <td>{{ ranking.3|floatformat:2 }}</td>
-      <td>{{ ranking.4|multiply:100 }}%</td>
-    </tr>
-    {% endfor %}
-  </table>
-  </div>
-  </div>
+    <h1>Rankings</h1>
+    <div class="row">
+        <div class="col">
+            <table class="table table-hover FEMALE">
+                <thead>
+                <th colspan={{ FEMALE.0|length }}>Girls' Rankings</th>
+                </thead>
+                <thead>
+                <th>Rank</th>
+                <th>Name</th>
+                <th>Score</th>
+                <th>Versatility</th>
+                <th>Bonus</th>
+                </thead>
+                {% for ranking in FEMALE %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td><a href="{% url 'ranker:profile' pk=ranking.2.profile.pk %}">{{ ranking.2.username }}</a>
+                        </td>
+                        <td>{{ ranking.0|floatformat:2 }}</td>
+                        <td>{{ ranking.3|floatformat:2 }}</td>
+                        <td>{{ ranking.4|multiply:100 }}%</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+        <div class="col">
+            <table class="table table-hover MALE">
+                <thead>
+                <th colspan={{ MALE.0|length }}>Boys' Rankings</th>
+                </thead>
+                <thead>
+                <th>Rank</th>
+                <th>Name</th>
+                <th>Score</th>
+                <th>Versatility</th>
+                <th>Bonus</th>
+                </thead>
+                {% for ranking in MALE %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td><a href="{% url 'ranker:profile' pk=ranking.2.profile.pk %}">{{ ranking.2 }}</a></td>
+                        <td>{{ ranking.0|floatformat:2 }}</td>
+                        <td>{{ ranking.3|floatformat:2 }}</td>
+                        <td>{{ ranking.4|multiply:100 }}%</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
 {% endblock %}
