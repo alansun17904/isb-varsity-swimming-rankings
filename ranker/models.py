@@ -1,4 +1,5 @@
 from django import forms
+from django.shortcuts import reverse
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -7,7 +8,7 @@ class Profile(models.Model):
     Extended profile that contains coach flag, which enables them to
     freely access and modify the database.
     """
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     sex = models.CharField(max_length=6)
     attendance = models.BooleanField(default=False)
     is_coach = models.BooleanField(default=False)
@@ -38,8 +39,12 @@ class Entry(models.Model):
                 rank += 1
         return rank + 1
 
+    def get_absolute_url(self):
+        return reverse('ranker:profile', args=[self.swimmer.pk])
+
     def __str__(self):
         return f'{str(self.swimmer)}: {self.event}'
+
 
 
 class Hyperparameters(models.Model):

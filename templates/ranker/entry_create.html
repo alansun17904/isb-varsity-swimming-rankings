@@ -1,0 +1,17 @@
+{% extends "ranker/base.html" %}
+{% load bootstrap5 %}
+{% block body_block %}
+    <h1>Create a new entry</h1>
+    <p>
+        Use the following form to add/update your times. Please note that
+        any updates to the database needs to be approved by staff. Thus,
+        changes may not be reflected right away.
+    </p>
+    <form action="{% url 'ranker:entry_create' %}" method="POST">
+        {% bootstrap_form form %}
+        {% csrf_token %}
+        {% buttons %}
+        <button type="submit" class="btn btn-success">Create</button>
+        {% endbuttons %}
+    </form>
+{% endblock %}

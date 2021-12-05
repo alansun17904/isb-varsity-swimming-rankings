@@ -1,0 +1,12 @@
+{% extends "ranker/base.html" %}
+{% load bootstrap5 %}
+{% block body_block %}
+    <h1>Edit Entry</h1>
+    <form method="POST">
+        {% bootstrap_form form %}
+        {% csrf_token %}
+        {% buttons %}
+            <button type="submit" class="btn btn-warning">Update</button>
+        {% endbuttons %}
+    </form>
+{% endblock %}

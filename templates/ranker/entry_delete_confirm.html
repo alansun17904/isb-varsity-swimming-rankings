@@ -1,0 +1,25 @@
+{% extends "ranker/base.html" %}
+{% load bootstrap5 %}
+{% load extras %}
+{% block body_block %}
+    <h1>Delete Entry</h1>
+    Are you sure that you would like to delete the following entry?
+    <table class="table">
+        <thead>
+        <th>Event</th>
+        <th>Time</th>
+        <th>Meet</th>
+        <thead>
+        <tr>
+            <td>{{ entry.event }}</td>
+            <td>{{ entry.time|shorttolong }}</td>
+            <td>{{ entry.meet }}</td>
+        </tr>
+    </table>
+    <form method="POST">
+        {% csrf_token %}
+        {% buttons %}
+            <button type="submit" class="btn btn-danger">Delete</button>
+        {% endbuttons %}
+    </form>
+{% endblock %}
