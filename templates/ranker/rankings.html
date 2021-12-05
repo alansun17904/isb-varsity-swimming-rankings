@@ -2,7 +2,9 @@
 {% load extras %}
 {% block body_block %}
   <h1>Rankings</h1>
-  <table class="FEMALE column">
+  <div class="row">
+  <div class="col">
+  <table class="table table-hover FEMALE">
     <thead>
       <th colspan={{ FEMALE.0|length }}>Girls' Rankings</th>
     </thead>
@@ -23,7 +25,9 @@
     </tr>
     {% endfor %}
   </table>
-  <table class="MALE column">
+  </div>
+  <div class="col">
+  <table class="table table-hover MALE">
     <thead>
       <th colspan={{ MALE.0|length }}>Boys' Rankings</th>
     </thead>
@@ -44,4 +48,6 @@
     </tr>
     {% endfor %}
   </table>
+  </div>
+  </div>
 {% endblock %}
