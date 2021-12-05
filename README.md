@@ -1,25 +1,15 @@
 # ISB Varsity Swim Team Ranking Program 
-Herein contains the program for the ISB (International School of Beijing) varsity
-swim team selection algorithm. This program compiles the data collated in the
-excel sheets in the repository, calculates each person's ranking based on the 
-selection criteria, and then outputs this in pretty form in a specified file. 
-
-For more information about the algorithm itself, please see the white paper that
-is attached in the repository.
-
+Herein lies the source code for the [ISB Varsity Swimming](https://isbswim.herokuapp.com/)
+ranking website. This site implements the ranking algorithm described by Alan Sun and
+Emory Sun, which can be found [here](https://isbswim.herokuapp.com/static/ranker/an-algorithm-for-varsity-swim-team-selection.pdf).
 ## Installation
-1. Please follow the instructions [here](https://www.python.org/downloads/) to download
-Python 3. 
-2. Download this directory.
-3. Open the Terminal app on Mac.
-4. Type in the command `cd`, drag the icon of the downloaded folder inside the terminal
-window. Press <Enter> when you see the path to the downloaded folder show up inside the 
-terminal.
-5. Type in the following command `./setup.sh` and press <Enter>. This download should take
-a while. 
-6. The program is ready for execution!
+1. Clone the repository `git clone https://github.com/alansun17904/isb-varsity-swimming-rankings.git`
+2. Install the dependencies; here, we note that Python 3.7.0 is being used. `pip install requirements.txt`
+3. Start the server by running `python manage.py runserver` in the top-level directory.
+
 ## Prerequisites
-We note that the notation of events is incredibly important. Each event is 
+We note that the notation of events is incredibly important, as knowledge of this 
+notation is assumed throughout the interface of the website. Each event is 
 assigned a unique code that is consistent throughout the input/output of the
 program. It is crucial that the user is conscious of correspondance between
 the value of these codes and its events. A table of this is shown below:
@@ -41,54 +31,40 @@ the value of these codes and its events. A table of this is shown below:
 
 Please note that the casing of the codes is also significant.
 
+## Contributing
+To start, please see the issues page for any outstanding features/problems with the website.
+Those interested in contributing can learn about the structure of the project and its implementation
+quickly through the [design specifications](https://github.com/alansun17904/isb-varsity-swimming-rankings/blob/main/DESIGN.md)
+and the [implementation specifications]().
 
 ## Usage
 Usage comes in three stages: data entry, hyperparameter determination, and ranking.
 Here we describe each of these stages in full. 
 
+We note that since the website is to only be accessed by swimmers of the International
+School of Beijing and its coaches, coaches (superusers) must pre-make accounts for incoming 
+swimmers. This can be done by accessing the [staff page](https://isbswim.herokuapp.com/admin/).
+
+Once accounts for each swimmer is made, they can log in and start data entry.
+
 ### Data Entry
-The data for the ranking progarm is stored in two main Excel sheets: `rankings-to-date.xlsx`
-and `attendance.xlsx`. The former contains the times of each person for each event, and
-the latter contains attendance inforamtion for bonus points determination. 
+Each swimmer is responsible for entering their own times. The validitiy of these times are then 
+checked by coaches/captains/staff managing the website. 
 
-We proceed by discussing the former first. The `rankings-to-date.xlsx` Excel sheet is 
-divided into 6 columns: `Ranking`, `Time`, `Name`, `Event`, `Sex`, `Meet`. 
-
-The first field is an automatically calculated field that updates based on the time field. 
-Here, the user **does not** need to modify anything, as the formula for determining this
-rank stays constant. 
-
-The second field represents the time that the given swimmer has swam
-for this particular event. We note that if the time is less than a minute, it can be
-represented in short form:
+Times must be entered in the long-format and the adherence to this format will be checked. 
+We note that if the time is less than a minute, it can be represented in short form:
 - `ss.mm`
 such that the first two digits represent the time in seconds, and the second two
-digits represent milisecond time. 
+digits represent milisecond time.
+
 On the other hand, if the time is longer than a minute, it must be represented in 
 long form:
 - `mm:ss.ii`
 such that the first two digits represent the time in minutes; the second two
 represents the time in seconds, and the last two digits represents the time in miliseconds.
 
-The third field is the name of the swimmer. The name and its format must be consistent
-for the swimmer throughout the sheet.
-
-The fourth field `Event` represents the event code in which the swimmer has achieved 
-this time. Please see the table in the previous subsection for a reference on the 
-relationship between the event names and the codes.
-
-The fifth field represents the `sex` of the swimmer. Since boys are girls are ranked
-separately, this is necessary, and must be entered for every row. Note that this field
-must be encoded in all caps: either `MALE` or `FEMALE` is accepted.
-
-The sixth field is option and represents the meet where this swimmer has achieved this time.
-
-We note that each row in the Excel sheet represents the swimmer's fastest time in each event.
-Thus, if a swimmer achieves a faster time than is previously recorded in the Excel sheet, the
-corresponding row needs to be updated *rather than adding a new row*.
-
-We also note that any change in the structure of the sheet, for example, changing the name
-of the columns may result in undefined behavior from the ranker.
+Once swimmers enter their times, these entries will be pending approval. If these entries are
+approved, they will be actively used in the ranking. 
 
 ### Hyperparameter Determination
 Hyperparameters are crucial to the functionality of the program. They determine how many 
@@ -102,15 +78,21 @@ from 1 to 12. The higher this number is the more versatile each swimmer must be.
 attend all practices.
 - `weighting-function`: the weighting function that is used to determine the score. 
 The possible values for this parameter are detailed in the white paper.
+- `event-bonus`: the bonuses assigned to each rank in each event. *This field must be
+entered in JSON format on the admin page*.
 
-The values for these hyperparameters must be entered on separate lines in the 
-`hyperparameters.settings` file. Each line will begin with the name of the hyperparameter
-and its corresponding value. An example of this is given below:
+An example of these fields is shown below:
 ```
 h-index 10
 attendance-bonus true 0.02
 weighting-function uniform 1
+event-bonus {
+    "FR50m": [0.1, 0.08, 0.06, 0.04],
+    "FR100m": [0.1, 0.08, 0.06, 0.04],
+    ...
+}
 ```
+
 the first line corresponds to the `h-index` and the number that follows it is the
 number of events each swimmer will be judged by. The second line corresponds to the
 `attendance-bonus` hyperparameter, if the word that comes after this is `true` then
@@ -127,12 +109,5 @@ functions include:
 More about this is presented in the white paper itself.
 
 ### Ranking
-The user can run the application through the folloing steps:
-0. Downloading this entire folder. 
-1. Open the Terminal application (assuming Mac)
-2. Type in the command `cd` in Terminal, then drag the icon of the downloaded
-folder and drop the icon into the Terminal window. 
-3. Press <Enter>
-4. Type in the command `./rank.sh` then press <Enter>
-5. The program will then start and prompt the user.
-
+Here, ranking is handled by the website itself. Thus, the user needs only to make sure that 
+each user has entered the correct times and that the hyperparameters being used are desirable. 
