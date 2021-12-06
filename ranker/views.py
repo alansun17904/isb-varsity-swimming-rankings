@@ -58,7 +58,7 @@ class EntryCreateView(CreateView, LoginRequiredMixin):
 class EntryUpdateView(UpdateView, LoginRequiredMixin):
     model = Entry
     template_name = 'ranker/entry_update.html'
-    fields = ('event', 'time', 'meet')
+    form_class = EntryForm
 
     def post(self, request, *args, **kwargs):
         entry = get_object_or_404(Entry, pk=kwargs['pk'])
