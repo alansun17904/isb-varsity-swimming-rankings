@@ -1,7 +1,7 @@
 # ISB Varsity Swim Team Ranking Program 
 Herein lies the source code for the [ISB Varsity Swimming](https://isbswim.herokuapp.com/)
 ranking website. This site implements the ranking algorithm described by Alan Sun and
-Emory Sun, which can be found [here]([https://isbswim.herokuapp.com/static/ranker/an-algorithm-for-varsity-swim-team-selection.pdf](https://github.com/alansun17904/isb-varsity-swimming-rankings/blob/main/static/ranker/an-algorithm-for-varsity-swim-team-selection.pdf)).
+Emory Sun, which can be found [here](https://github.com/alansun17904/isb-varsity-swimming-rankings/blob/main/static/ranker/an-algorithm-for-varsity-swim-team-selection.pdf).
 ## Installation
 1. Clone the repository `git clone https://github.com/alansun17904/isb-varsity-swimming-rankings.git`
 2. Install the dependencies; here, we note that Python 3.7.0 is being used. `pip install requirements.txt`
